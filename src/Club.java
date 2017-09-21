@@ -67,6 +67,8 @@ public class Club {
             JTextField jTextField=new JTextField(20);
             JList<MusicType> jList=new JList<>(MusicType.values()); //Список всех возможных типов танца
             JList<MusicType> dancerStyleList=new JList<>(helpList); //Выбрынные типы
+            jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            dancerStyleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             JScrollPane scrollPanejList=new JScrollPane(jList);
             JScrollPane scrollPaneDancerStyleList =new JScrollPane(dancerStyleList);
             scrollPanejList.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -148,7 +150,6 @@ public class Club {
         @Override
         public void actionPerformed(ActionEvent e) {
             DefaultListModel<Observer> helpList=new DefaultListModel<>();
-            Iterator iterator=danceSquare.getDancers().iterator();
             for (Observer o : danceSquare.getDancers()) {
                 helpList.addElement(o);
             }
@@ -156,28 +157,21 @@ public class Club {
             JPanel buttonPanel=new JPanel();
             JButton closeButton = new JButton("Закрыть");
             JList<Observer> dancersList=new JList<>(helpList);
+            dancersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             JScrollPane jScrollPane=new JScrollPane(dancersList);
             jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-            closeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    frame.setVisible(false);
-                }
-            });
+            closeButton.addActionListener(e1 -> frame.setVisible(false));
             JButton removeDancer = new JButton("Удалить танцора");
-            removeDancer.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    for (Observer dancer1 : danceSquare.getDancers()) {
-                    Dancer dancer = (Dancer) dancer1;
-                    if (( dancersList.getSelectedValue().toString()).equals(dancer.getName())) {
-                        danceSquare.removeObserver(dancer);
-                        helpList.removeElement(dancer);
-                        Club.textArea.append(dancer.getName()+ " покинул заведение\n");
-                        break;
-                    }
+            removeDancer.addActionListener(e12 -> {
+                for (Observer dancer1 : danceSquare.getDancers()) {
+                Dancer dancer = (Dancer) dancer1;
+                if (( dancersList.getSelectedValue().toString()).equals(dancer.getName())) {
+                    danceSquare.removeObserver(dancer);
+                    helpList.removeElement(dancer);
+                    Club.textArea.append(dancer.getName()+ " покинул заведение\n");
+                    break;
                 }
-                }
+            }
             });
             buttonPanel.add(removeDancer);
             buttonPanel.add(closeButton);
